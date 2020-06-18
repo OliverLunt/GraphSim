@@ -21,7 +21,7 @@ OPTIMIZE=yes
 # (here: Python). Enter here the path to the SWIG binary. If you do not have
 # SWIG and do not need Python bindings, leave it empty and build only the target
 # 'gs', not 'all'
-SWIG=/usr/bin/swig
+SWIG=/usr/local/bin/swig
 
 # Mathlink is a part of Mathematica. It is used here to compare the computation of
 # graphsim with Scott Aaronson's CHP program. If you do not want to do debugging
@@ -34,7 +34,13 @@ WITH_MATHLINK=no
 CXX=g++
 CC=gcc
 
+#source /opt/intel/compilers_and_libraries_2019/linux/mkl/bin/mklvars.sh ia32
+
 CFLAGS=-Wall -fPIC
+CFLAGS += -fvisibility=hidden
+CFLAGS += -std=c++11 -pthread -march=native
+POSTFLAGS=-LLIBDIR -lntl -lgmp -lgf2x -lm
+#CFLAGS += -m64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm
 NOLINK=-c
 ifeq (${DEBUG}, yes)
    CFLAGS += -g
@@ -47,7 +53,7 @@ ifeq (${OPTIMIZE}, yes)
 endif
 
 # Doxygen binary. (Leave empty if you do not have Doxygen.)
-DOXYGEN=
+DOXYGEN=/usr/bin/doxygen
 
 # End of user configurable settings.
 
@@ -59,8 +65,6 @@ ifeq (${WITH_MATHLINK}, yes)
    MLLIB = ${MATHLINK}/libML.a
    MLINC = -I${MATHLINK}
 endif
-
-
  
 all: gs pywrapper doc docpy
 
@@ -78,31 +82,31 @@ DELFILES=*.o _*.so gstest *_wrap.* graphsim.py \
 	graphsim.html chp.py chp.html *.pyc core.*
 clean:
 	rm -f ${DELFILES} CHP/${DELFILES}
-	cd doc && rm -rf *
+	#cd doc && rm -rf *
 	
 # Now the details:
 
 gstest: graphsim.o loccliff.o stabilizer.o gstest.cpp
-	${CXX} ${CFLAGS} -o gstest gstest.cpp graphsim.o loccliff.o stabilizer.o ${MLLIB}
+	${CXX} ${CFLAGS} -o gstest gstest.cpp graphsim.o loccliff.o stabilizer.o ${MLLIB} ${POSTFLAGS} -I/home/oliver/anaconda3/envs/idp/include/python3.7m -L/home/oliver/anaconda3/envs/idp/lib -lpython3.7m
 	
 graphsim.o: graphsim.cpp graphsim.h cphase.tbl loccliff.h stabilizer.h
-	${CXX} ${CFLAGS} ${NOLINK} graphsim.cpp
+	${CXX} ${CFLAGS} ${NOLINK} graphsim.cpp -I/home/oliver/anaconda3/envs/idp/include/python3.7m
   
 loccliff.o: loccliff.cpp loccliff.h
-	${CXX} ${CFLAGS} ${NOLINK} loccliff.cpp
+	${CXX} ${CFLAGS} ${NOLINK} loccliff.cpp -I/home/oliver/anaconda3/envs/idp/include/python3.7m
 
 stabilizer.o: stabilizer.cpp stabilizer.h graphsim.h loccliff.h
-	${CXX} ${CFLAGS} ${NOLINK} stabilizer.cpp ${MLINC} 
+	${CXX} ${CFLAGS} ${NOLINK} stabilizer.cpp ${MLINC} -I/home/oliver/anaconda3/envs/idp/include/python3.7m
 
 graphsim_wrap.cxx: graphsim.h loccliff.h
-	${SWIG} -python ${NOLINK}++ -globals consts graphsim.h
+	${SWIG} -python -py3 ${NOLINK}++ -globals consts graphsim.h
    
 _graphsim.so: graphsim.o graphsim_wrap.o loccliff.o stabilizer.o
 	${CXX} ${CFLAGS} -shared graphsim.o graphsim_wrap.o loccliff.o \
-	stabilizer.o ${MLLIB} -o _graphsim.so
- 
+	stabilizer.o ${MLLIB} ${POSTFLAGS} -I/home/oliver/anaconda3/envs/idp/include/python3.7m -o _graphsim.so
+
 graphsim_wrap.o: graphsim_wrap.cxx
-	${CXX} ${CFLAGS} ${NOLINK} graphsim_wrap.cxx -I/usr/include/python2.7/
+	${CXX} ${CFLAGS} ${NOLINK} graphsim_wrap.cxx -I/home/oliver/anaconda3/envs/idp/include/python3.7m
 
 loccliff.h: multtbl.tbl
 
@@ -122,11 +126,14 @@ doc/timestamp.dummy: graphsim.h loccliff.h stabilizer.h
 
 chp.py: _chp.so
 
+#chp_wrap.o: CHP/chp_wrap.c
+#	${CC} ${CFLAGS} ${NOLINK} CHP/chp_wrap.c -I/usr/include/python2.7/
+
 chp_wrap.o: CHP/chp_wrap.c
-	${CC} ${CFLAGS} ${NOLINK} CHP/chp_wrap.c -I/usr/include/python2.7/
+	${CC} ${CFLAGS} ${NOLINK} CHP/chp_wrap.c -I/home/oliver/anaconda3/envs/idp/include/python3.7m
 
 chp_wrap.c: CHP/chp.i CHP/chp.h
-	${SWIG} -python CHP/chp.i
+	${SWIG} -python -py3 CHP/chp.i
    
 chp.o: CHP/chp.c
 	${CC} ${CFLAGS} ${NOLINK} CHP/chp.c

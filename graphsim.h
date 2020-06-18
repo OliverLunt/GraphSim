@@ -50,6 +50,9 @@ If you use another compiler, you might have to change the include
 file and the namespace identifier.
 */
 
+#define PY_SSIZE_T_CLEAN
+#include <Python.h>
+
 #ifndef GRAPHSIM_H
 #define GRAPHSIM_H
 
@@ -60,7 +63,10 @@ file and the namespace identifier.
 #include "graphsim.h"
 #include "loccliff.h"
 #include "stabilizer.h"
+#include <NTL/mat_GF2.h>
+#include <list>
 %}
+%include "typemaps.i"
 %include "cpointer.i"
 %pointer_class (bool, boolpc);
 %feature ("autodoc", "1");
@@ -73,6 +79,7 @@ file and the namespace identifier.
 
 #include <iostream>
 #include <cstdlib>
+#include <list>
 #include <vector>
 #include <cassert>
 
@@ -82,7 +89,10 @@ file and the namespace identifier.
 #include <cstring>
 #include <cstdlib>
 
+#include <NTL/mat_GF2.h>
+
 using namespace std;
+
 
 /*! All vertices in a graph state are numbered beginning with 0. To specify
 auch an index, the type VertexIndex (which is just unsigned long) is always
@@ -140,6 +150,10 @@ class GraphRegister {
    void print_adj_list (ostream& os = cout) const;
    void print_adj_list_line (ostream& os, VertexIndex i) const;
    void print_stabilizer (ostream& os = cout) const;
+   NTL::mat_GF2 subAdjacencyMatrix (const hash_set<VertexIndex> vs1, 
+      const hash_set<VertexIndex> vs2);
+   hash_set<VertexIndex> complementSet (const hash_set<VertexIndex> vs1);
+   long entEntropy (PyObject* obj);
   private:
    void add_edge (VertexIndex v1, VertexIndex v2);
    void del_edge (VertexIndex v1, VertexIndex v2);

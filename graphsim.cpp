@@ -1,9 +1,20 @@
 // graphsim.cpp
 
+#define PY_SSIZE_T_CLEAN
+#include <Python.h>
+
 #include "graphsim.h"
+#include <cstdlib>
+#include <list>
 
 #include <utility>
 #include <ctime>
+//#include "mkl.h"
+#include <NTL/mat_GF2.h>
+#include <iostream>
+
+using namespace std;
+using namespace NTL;
 
 //!Random coin toss. Change here to insert your favorite RNG.
 int bool_rand (void) {
@@ -515,3 +526,50 @@ bool GraphRegister::remove_byprod_op (VertexIndex v, VertexIndex avoid)
    return true;
 }
 
+hash_set<VertexIndex> GraphRegister::complementSet (const hash_set<VertexIndex> vs1)
+{
+    hash_set<VertexIndex> vs2;
+    for (VertexIndex i = 0; i < vertices.size(); i++) {
+        if (vs1.find(i) == vs1.end()) {
+            vs2.insert(i);
+        }
+    }
+    return vs2;
+}
+
+
+mat_GF2 GraphRegister::subAdjacencyMatrix (const hash_set<VertexIndex> vs1,
+    const hash_set<VertexIndex> vs2)
+{
+    unsigned size_vs1 = vs1.size();
+    unsigned size_vs2 = vs2.size();
+    mat_GF2 adj;
+    adj.SetDims(size_vs1, size_vs2);
+    hash_set <VertexIndex>::iterator vs1_cIter = vs1.begin();
+    for (unsigned i = 0; i < size_vs1; i++) {
+        hash_set <VertexIndex>::iterator vs2_cIter = vs2.begin();
+        for (unsigned j = 0; j < size_vs2; j++) {
+            adj [i][j] = 
+                vertices[*vs1_cIter].neighbors.find(*vs2_cIter) != vertices[*vs1_cIter].neighbors.end();
+            vs2_cIter++;
+        }
+        vs1_cIter++;
+    }
+    return adj;
+}
+
+long GraphRegister::entEntropy (PyObject* obj)
+{
+    PyObject* seq = PySequence_Fast(obj, "expected a sequence");
+    int len = PySequence_Size(obj);
+    hash_set<VertexIndex> vs1;
+    for (int i = 0; i < len; i++) {
+        PyObject* item = PySequence_Fast_GET_ITEM(seq, i);
+        VertexIndex v = PyLong_AsLong(item); 
+        vs1.insert(v);
+    } 
+    hash_set<VertexIndex> vs2 = complementSet(vs1);
+    mat_GF2 adj = subAdjacencyMatrix(vs1, vs2);
+    long rank = gauss(adj);
+    return rank;
+}
