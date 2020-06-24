@@ -5986,6 +5986,81 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_GraphRegister_degreeSum_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  GraphRegister *arg1 = (GraphRegister *) 0 ;
+  long arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  long val2 ;
+  int ecode2 = 0 ;
+  PyObject *swig_obj[2] ;
+  
+  if (!SWIG_Python_UnpackTuple(args, "GraphRegister_degreeSum_set", 2, 2, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_GraphRegister, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphRegister_degreeSum_set" "', argument " "1"" of type '" "GraphRegister *""'"); 
+  }
+  arg1 = reinterpret_cast< GraphRegister * >(argp1);
+  ecode2 = SWIG_AsVal_long(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphRegister_degreeSum_set" "', argument " "2"" of type '" "long""'");
+  } 
+  arg2 = static_cast< long >(val2);
+  if (arg1) (arg1)->degreeSum = arg2;
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphRegister_degreeSum_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  GraphRegister *arg1 = (GraphRegister *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  long result;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_GraphRegister, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphRegister_degreeSum_get" "', argument " "1"" of type '" "GraphRegister *""'"); 
+  }
+  arg1 = reinterpret_cast< GraphRegister * >(argp1);
+  result = (long) ((arg1)->degreeSum);
+  resultobj = SWIG_From_long(static_cast< long >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphRegister_largestCluster(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  GraphRegister *arg1 = (GraphRegister *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  long result;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_GraphRegister, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphRegister_largestCluster" "', argument " "1"" of type '" "GraphRegister *""'"); 
+  }
+  arg1 = reinterpret_cast< GraphRegister * >(argp1);
+  result = (long)(arg1)->largestCluster();
+  resultobj = SWIG_From_long(static_cast< long >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *GraphRegister_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args, "swigregister", 1, 1, &obj)) return NULL;
@@ -6085,6 +6160,9 @@ static PyMethodDef SwigMethods[] = {
 	 { "GraphRegister_subAdjacencyMatrix", _wrap_GraphRegister_subAdjacencyMatrix, METH_VARARGS, "GraphRegister_subAdjacencyMatrix(GraphRegister self, hash_set< VertexIndex > const vs1, hash_set< VertexIndex > const vs2) -> NTL::mat_GF2"},
 	 { "GraphRegister_complementSet", _wrap_GraphRegister_complementSet, METH_VARARGS, "GraphRegister_complementSet(GraphRegister self, hash_set< VertexIndex > const vs1) -> hash_set< VertexIndex >"},
 	 { "GraphRegister_entEntropy", _wrap_GraphRegister_entEntropy, METH_VARARGS, "GraphRegister_entEntropy(GraphRegister self, PyObject * obj) -> long"},
+	 { "GraphRegister_degreeSum_set", _wrap_GraphRegister_degreeSum_set, METH_VARARGS, "GraphRegister_degreeSum_set(GraphRegister self, long degreeSum)"},
+	 { "GraphRegister_degreeSum_get", _wrap_GraphRegister_degreeSum_get, METH_O, "GraphRegister_degreeSum_get(GraphRegister self) -> long"},
+	 { "GraphRegister_largestCluster", _wrap_GraphRegister_largestCluster, METH_O, "GraphRegister_largestCluster(GraphRegister self) -> long"},
 	 { "GraphRegister_swigregister", GraphRegister_swigregister, METH_O, NULL},
 	 { "GraphRegister_swiginit", GraphRegister_swiginit, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

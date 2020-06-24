@@ -154,6 +154,8 @@ class GraphRegister {
       const hash_set<VertexIndex> vs2);
    hash_set<VertexIndex> complementSet (const hash_set<VertexIndex> vs1);
    long entEntropy (PyObject* obj);
+   long degreeSum = 0;
+   long largestCluster ();
   private:
    void add_edge (VertexIndex v1, VertexIndex v2);
    void del_edge (VertexIndex v1, VertexIndex v2);

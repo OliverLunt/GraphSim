@@ -318,6 +318,11 @@ class GraphRegister(object):
     def entEntropy(self, obj: "PyObject *") -> "long":
         r"""entEntropy(GraphRegister self, PyObject * obj) -> long"""
         return _graphsim.GraphRegister_entEntropy(self, obj)
+    degreeSum = property(_graphsim.GraphRegister_degreeSum_get, _graphsim.GraphRegister_degreeSum_set, doc=r"""degreeSum : long""")
+
+    def largestCluster(self) -> "long":
+        r"""largestCluster(GraphRegister self) -> long"""
+        return _graphsim.GraphRegister_largestCluster(self)
 
 # Register GraphRegister in _graphsim:
 _graphsim.GraphRegister_swigregister(GraphRegister)

@@ -5,6 +5,7 @@
 
 #include "graphsim.h"
 #include <cstdlib>
+#include <queue>
 #include <list>
 
 #include <utility>
@@ -48,14 +49,18 @@ void GraphRegister::add_edge (VertexIndex v1, VertexIndex v2) {
    assert (v1 != v2);
    vertices[v1].neighbors.insert (v2);
    vertices[v2].neighbors.insert (v1);
+   degreeSum += 2;
    //D cerr << "adding edge " << v1 << " - " << v2 << endl;
 }
 
 //! Delete an edge to the graph underlying the state.
 void GraphRegister::del_edge (VertexIndex v1, VertexIndex v2) {
    DBGOUT ("deling edge " << v1 << " - " << v2 << endl);
-   vertices[v1].neighbors.erase (v2);
+   int n1 = vertices[v1].neighbors.erase (v2);
    vertices[v2].neighbors.erase (v1);
+   if (n1 == 1) {
+      degreeSum -= 2;
+   }
 }
 
 //! Toggle an edge to the graph underlying the state.
@@ -65,6 +70,7 @@ void GraphRegister::toggle_edge (VertexIndex v1, VertexIndex v2)
    int n1 = vertices[v1].neighbors.erase (v2);
    if (n1 == 1) {
       vertices[v2].neighbors.erase (v1);
+      degreeSum -= 2;
    } else {
       assert (n1 == 0);
       add_edge (v1, v2);
@@ -572,4 +578,45 @@ long GraphRegister::entEntropy (PyObject* obj)
     mat_GF2 adj = subAdjacencyMatrix(vs1, vs2);
     long rank = gauss(adj);
     return rank;
+}
+
+long GraphRegister::largestCluster ()
+{
+    int numQubits = vertices.size();
+    vector<bool> visited(numQubits);
+    for (int i = 0; i < numQubits ; i++) {
+        visited[i] = false;
+    }
+    int largest_cluster_size = 0;
+    while (any_of(visited.cbegin(),visited.cend(),[](bool i){return not i;})) {
+        // Pick a new start node
+        int start_node;
+        for (int i = 0; i < numQubits ; i++) {
+            if (!visited[i]) {
+                start_node = i;
+                break;
+            }
+        }
+        int cluster_size = 1;
+        visited[start_node] = true;
+        // Queue to keep track of which nodes we need to visit
+        std::queue<int> Queue;
+        Queue.push(start_node);
+        while (!Queue.empty()) {
+            int node = Queue.front();
+            Queue.pop();
+            hash_set <VertexIndex>::iterator neighbours_Iter;
+            for (neighbours_Iter = vertices[node].neighbors.begin(); neighbours_Iter != vertices[node].neighbors.end(); neighbours_Iter++) {
+                if (!visited[*neighbours_Iter]) {
+                    visited[*neighbours_Iter] = true;
+                    Queue.push(*neighbours_Iter);
+                    cluster_size += 1;
+                }
+            }
+        }
+        if (cluster_size > largest_cluster_size) {
+            largest_cluster_size = cluster_size;
+        }
+    }
+    return largest_cluster_size;
 }

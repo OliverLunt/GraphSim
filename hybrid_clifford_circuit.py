@@ -1,13 +1,14 @@
 from matplotlib import pyplot as plt
 import graphsim
 import numpy as np
+from pdb import set_trace
 
 # Parameters
 
 N = 100
 num_steps = 4*N
 num_samples = 100
-prob = 0
+prob = 0.2
 
 sample_times = np.rint(np.linspace(0, num_steps, num_samples)).astype(int)
 sample_time_check_list = np.isin(np.arange(num_steps+1), sample_times)
@@ -42,7 +43,9 @@ for n in range(num_steps):
         index = np.argwhere(sample_times == n)
         unaveraged_entropies_vs_time[index] = gr.entEntropy(ent_subsystem)
 
-plt.plot(sample_times, unaveraged_entropes_vs_time, marker='o')
+set_trace()
+
+plt.plot(sample_times, unaveraged_entropies_vs_time, marker='o')
 plt.xlabel("Time")
 plt.ylabel("Half-chain entropy")
 plt.show()
