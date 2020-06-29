@@ -13,6 +13,7 @@
 //#include "mkl.h"
 #include <NTL/mat_GF2.h>
 #include <iostream>
+#include <random>
 
 using namespace std;
 using namespace NTL;
@@ -532,6 +533,10 @@ bool GraphRegister::remove_byprod_op (VertexIndex v, VertexIndex avoid)
    return true;
 }
 
+
+// New code from here
+
+
 hash_set<VertexIndex> GraphRegister::complementSet (const hash_set<VertexIndex> vs1)
 {
     hash_set<VertexIndex> vs2;
@@ -580,14 +585,15 @@ long GraphRegister::entEntropy (PyObject* obj)
     return rank;
 }
 
-long GraphRegister::largestCluster ()
+
+vector<long> GraphRegister::getClusters ()
 {
     int numQubits = vertices.size();
+    vector<long> clusters;
     vector<bool> visited(numQubits);
     for (int i = 0; i < numQubits ; i++) {
         visited[i] = false;
     }
-    int largest_cluster_size = 0;
     while (any_of(visited.cbegin(),visited.cend(),[](bool i){return not i;})) {
         // Pick a new start node
         int start_node;
@@ -614,9 +620,53 @@ long GraphRegister::largestCluster ()
                 }
             }
         }
-        if (cluster_size > largest_cluster_size) {
-            largest_cluster_size = cluster_size;
+        clusters.push_back(cluster_size);
+    }
+    return clusters;
+}
+
+long GraphRegister::largestCluster ()
+{
+    vector<long> cluster_sizes = getClusters(); 
+    long largest_cluster_size = *max_element(cluster_sizes.begin(), cluster_sizes.end());
+    return largest_cluster_size;
+}
+
+
+void GraphRegister::randomTwoQubitClifford(VertexIndex v1, VertexIndex v2)
+{
+    // Load a table containing a decomposition of all
+    // 2-qubit Cliffords into a sequence of characters from
+    // the range [0,1,2,3,4]. Their meanings are
+    // 0: cphase(v1, v2)
+    // 1: hadamard(v1)
+    // 2: phaserot(v1)
+    // 3: hadamard(v2)
+    // 4: phaserot(v2)
+    // and the string should be read from right to left (like
+    // matrix multiplication).
+    static const std::string c2_tbl[11520] =
+      #include "C2matrices_shortest_words"
+    ;   
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distr(0, 11519);
+
+    int c2_index = distr(gen);
+    std::string gate = c2_tbl[c2_index];
+    for (int i = gate.size() - 1; i>=0 ; i--) {
+        if ( gate[i]=='0' ) {
+           cphase (v1, v2); 
+        } else if ( gate[i]=='1' ) {
+            hadamard (v1);
+        } else if ( gate[i]=='2' ) {
+            phaserot (v1);
+        } else if ( gate[i]=='3' ) {
+            hadamard (v2);
+        } else if ( gate[i]=='4' ) {
+            phaserot (v2);
+        } else {
+            cerr << "Gate was not one of 0, 1, 2, 3 or 4.\n";
         }
     }
-    return largest_cluster_size;
 }

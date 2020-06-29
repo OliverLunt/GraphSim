@@ -68,6 +68,8 @@ file and the namespace identifier.
 %}
 %include "typemaps.i"
 %include "cpointer.i"
+%include <std_vector.i> 
+%template() std::vector<long>;
 %pointer_class (bool, boolpc);
 %feature ("autodoc", "1");
 %rename (print_tbl) Stabilizer::print;
@@ -155,7 +157,9 @@ class GraphRegister {
    hash_set<VertexIndex> complementSet (const hash_set<VertexIndex> vs1);
    long entEntropy (PyObject* obj);
    long degreeSum = 0;
+   vector<long> getClusters ();
    long largestCluster ();
+   void randomTwoQubitClifford(VertexIndex v1, VertexIndex v2);
   private:
    void add_edge (VertexIndex v1, VertexIndex v2);
    void del_edge (VertexIndex v1, VertexIndex v2);

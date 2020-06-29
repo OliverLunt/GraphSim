@@ -63,6 +63,67 @@ class _SwigNonDynamicMeta(type):
     __setattr__ = _swig_setattr_nondynamic_class_variable(type.__setattr__)
 
 
+class SwigPyIterator(object):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
+
+    def __init__(self, *args, **kwargs):
+        raise AttributeError("No constructor defined - class is abstract")
+    __repr__ = _swig_repr
+    __swig_destroy__ = _graphsim.delete_SwigPyIterator
+
+    def value(self) -> "PyObject *":
+        return _graphsim.SwigPyIterator_value(self)
+
+    def incr(self, n: "size_t"=1) -> "swig::SwigPyIterator *":
+        return _graphsim.SwigPyIterator_incr(self, n)
+
+    def decr(self, n: "size_t"=1) -> "swig::SwigPyIterator *":
+        return _graphsim.SwigPyIterator_decr(self, n)
+
+    def distance(self, x: "SwigPyIterator") -> "ptrdiff_t":
+        return _graphsim.SwigPyIterator_distance(self, x)
+
+    def equal(self, x: "SwigPyIterator") -> "bool":
+        return _graphsim.SwigPyIterator_equal(self, x)
+
+    def copy(self) -> "swig::SwigPyIterator *":
+        return _graphsim.SwigPyIterator_copy(self)
+
+    def next(self) -> "PyObject *":
+        return _graphsim.SwigPyIterator_next(self)
+
+    def __next__(self) -> "PyObject *":
+        return _graphsim.SwigPyIterator___next__(self)
+
+    def previous(self) -> "PyObject *":
+        return _graphsim.SwigPyIterator_previous(self)
+
+    def advance(self, n: "ptrdiff_t") -> "swig::SwigPyIterator *":
+        return _graphsim.SwigPyIterator_advance(self, n)
+
+    def __eq__(self, x: "SwigPyIterator") -> "bool":
+        return _graphsim.SwigPyIterator___eq__(self, x)
+
+    def __ne__(self, x: "SwigPyIterator") -> "bool":
+        return _graphsim.SwigPyIterator___ne__(self, x)
+
+    def __iadd__(self, n: "ptrdiff_t") -> "swig::SwigPyIterator &":
+        return _graphsim.SwigPyIterator___iadd__(self, n)
+
+    def __isub__(self, n: "ptrdiff_t") -> "swig::SwigPyIterator &":
+        return _graphsim.SwigPyIterator___isub__(self, n)
+
+    def __add__(self, n: "ptrdiff_t") -> "swig::SwigPyIterator *":
+        return _graphsim.SwigPyIterator___add__(self, n)
+
+    def __sub__(self, *args) -> "ptrdiff_t":
+        return _graphsim.SwigPyIterator___sub__(self, *args)
+    def __iter__(self):
+        return self
+
+# Register SwigPyIterator in _graphsim:
+_graphsim.SwigPyIterator_swigregister(SwigPyIterator)
+
 class boolpc(object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
     __repr__ = _swig_repr
@@ -169,9 +230,9 @@ class Stabilizer(object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
     __repr__ = _swig_repr
     numQubits = property(_graphsim.Stabilizer_numQubits_get, _graphsim.Stabilizer_numQubits_set, doc=r"""numQubits : VertexIndex""")
-    paulis = property(_graphsim.Stabilizer_paulis_get, _graphsim.Stabilizer_paulis_set, doc=r"""paulis : vector<(vector<(LocCliffOp)>)>""")
-    rowsigns = property(_graphsim.Stabilizer_rowsigns_get, _graphsim.Stabilizer_rowsigns_set, doc=r"""rowsigns : vector<(RightPhase)>""")
-    vtxidx = property(_graphsim.Stabilizer_vtxidx_get, _graphsim.Stabilizer_vtxidx_set, doc=r"""vtxidx : vector<(VertexIndex)>""")
+    paulis = property(_graphsim.Stabilizer_paulis_get, _graphsim.Stabilizer_paulis_set, doc=r"""paulis : std::vector<(std::vector<(LocCliffOp)>)>""")
+    rowsigns = property(_graphsim.Stabilizer_rowsigns_get, _graphsim.Stabilizer_rowsigns_set, doc=r"""rowsigns : std::vector<(RightPhase)>""")
+    vtxidx = property(_graphsim.Stabilizer_vtxidx_get, _graphsim.Stabilizer_vtxidx_set, doc=r"""vtxidx : std::vector<(VertexIndex)>""")
 
     def __init__(self, *args):
         r"""
@@ -245,7 +306,7 @@ class GraphRegister(object):
 
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
     __repr__ = _swig_repr
-    vertices = property(_graphsim.GraphRegister_vertices_get, _graphsim.GraphRegister_vertices_set, doc=r"""vertices : vector<(QubitVertex)>""")
+    vertices = property(_graphsim.GraphRegister_vertices_get, _graphsim.GraphRegister_vertices_set, doc=r"""vertices : std::vector<(QubitVertex)>""")
 
     def __init__(self, *args):
         r"""
@@ -320,9 +381,17 @@ class GraphRegister(object):
         return _graphsim.GraphRegister_entEntropy(self, obj)
     degreeSum = property(_graphsim.GraphRegister_degreeSum_get, _graphsim.GraphRegister_degreeSum_set, doc=r"""degreeSum : long""")
 
+    def getClusters(self) -> "std::vector< long >":
+        r"""getClusters(GraphRegister self) -> std::vector< long >"""
+        return _graphsim.GraphRegister_getClusters(self)
+
     def largestCluster(self) -> "long":
         r"""largestCluster(GraphRegister self) -> long"""
         return _graphsim.GraphRegister_largestCluster(self)
+
+    def randomTwoQubitClifford(self, v1: "VertexIndex", v2: "VertexIndex") -> "void":
+        r"""randomTwoQubitClifford(GraphRegister self, VertexIndex v1, VertexIndex v2)"""
+        return _graphsim.GraphRegister_randomTwoQubitClifford(self, v1, v2)
 
 # Register GraphRegister in _graphsim:
 _graphsim.GraphRegister_swigregister(GraphRegister)
