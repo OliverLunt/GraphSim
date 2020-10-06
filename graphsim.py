@@ -124,6 +124,112 @@ class SwigPyIterator(object):
 # Register SwigPyIterator in _graphsim:
 _graphsim.SwigPyIterator_swigregister(SwigPyIterator)
 
+class VectorOfStructVector(object):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
+    __repr__ = _swig_repr
+
+    def iterator(self) -> "swig::SwigPyIterator *":
+        return _graphsim.VectorOfStructVector_iterator(self)
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self) -> "bool":
+        return _graphsim.VectorOfStructVector___nonzero__(self)
+
+    def __bool__(self) -> "bool":
+        return _graphsim.VectorOfStructVector___bool__(self)
+
+    def __len__(self) -> "std::vector< std::vector< long > >::size_type":
+        return _graphsim.VectorOfStructVector___len__(self)
+
+    def __getslice__(self, i: "std::vector< std::vector< long > >::difference_type", j: "std::vector< std::vector< long > >::difference_type") -> "std::vector< std::vector< long,std::allocator< long > >,std::allocator< std::vector< long,std::allocator< long > > > > *":
+        return _graphsim.VectorOfStructVector___getslice__(self, i, j)
+
+    def __setslice__(self, *args) -> "void":
+        return _graphsim.VectorOfStructVector___setslice__(self, *args)
+
+    def __delslice__(self, i: "std::vector< std::vector< long > >::difference_type", j: "std::vector< std::vector< long > >::difference_type") -> "void":
+        return _graphsim.VectorOfStructVector___delslice__(self, i, j)
+
+    def __delitem__(self, *args) -> "void":
+        return _graphsim.VectorOfStructVector___delitem__(self, *args)
+
+    def __getitem__(self, *args) -> "std::vector< std::vector< long > >::value_type const &":
+        return _graphsim.VectorOfStructVector___getitem__(self, *args)
+
+    def __setitem__(self, *args) -> "void":
+        return _graphsim.VectorOfStructVector___setitem__(self, *args)
+
+    def pop(self) -> "std::vector< std::vector< long > >::value_type":
+        return _graphsim.VectorOfStructVector_pop(self)
+
+    def append(self, x: "std::vector< std::vector< long > >::value_type const &") -> "void":
+        return _graphsim.VectorOfStructVector_append(self, x)
+
+    def empty(self) -> "bool":
+        return _graphsim.VectorOfStructVector_empty(self)
+
+    def size(self) -> "std::vector< std::vector< long > >::size_type":
+        return _graphsim.VectorOfStructVector_size(self)
+
+    def swap(self, v: "VectorOfStructVector") -> "void":
+        return _graphsim.VectorOfStructVector_swap(self, v)
+
+    def begin(self) -> "std::vector< std::vector< long > >::iterator":
+        return _graphsim.VectorOfStructVector_begin(self)
+
+    def end(self) -> "std::vector< std::vector< long > >::iterator":
+        return _graphsim.VectorOfStructVector_end(self)
+
+    def rbegin(self) -> "std::vector< std::vector< long > >::reverse_iterator":
+        return _graphsim.VectorOfStructVector_rbegin(self)
+
+    def rend(self) -> "std::vector< std::vector< long > >::reverse_iterator":
+        return _graphsim.VectorOfStructVector_rend(self)
+
+    def clear(self) -> "void":
+        return _graphsim.VectorOfStructVector_clear(self)
+
+    def get_allocator(self) -> "std::vector< std::vector< long > >::allocator_type":
+        return _graphsim.VectorOfStructVector_get_allocator(self)
+
+    def pop_back(self) -> "void":
+        return _graphsim.VectorOfStructVector_pop_back(self)
+
+    def erase(self, *args) -> "std::vector< std::vector< long > >::iterator":
+        return _graphsim.VectorOfStructVector_erase(self, *args)
+
+    def __init__(self, *args):
+        _graphsim.VectorOfStructVector_swiginit(self, _graphsim.new_VectorOfStructVector(*args))
+
+    def push_back(self, x: "std::vector< std::vector< long > >::value_type const &") -> "void":
+        return _graphsim.VectorOfStructVector_push_back(self, x)
+
+    def front(self) -> "std::vector< std::vector< long > >::value_type const &":
+        return _graphsim.VectorOfStructVector_front(self)
+
+    def back(self) -> "std::vector< std::vector< long > >::value_type const &":
+        return _graphsim.VectorOfStructVector_back(self)
+
+    def assign(self, n: "std::vector< std::vector< long > >::size_type", x: "std::vector< std::vector< long > >::value_type const &") -> "void":
+        return _graphsim.VectorOfStructVector_assign(self, n, x)
+
+    def resize(self, *args) -> "void":
+        return _graphsim.VectorOfStructVector_resize(self, *args)
+
+    def insert(self, *args) -> "void":
+        return _graphsim.VectorOfStructVector_insert(self, *args)
+
+    def reserve(self, n: "std::vector< std::vector< long > >::size_type") -> "void":
+        return _graphsim.VectorOfStructVector_reserve(self, n)
+
+    def capacity(self) -> "std::vector< std::vector< long > >::size_type":
+        return _graphsim.VectorOfStructVector_capacity(self)
+    __swig_destroy__ = _graphsim.delete_VectorOfStructVector
+
+# Register VectorOfStructVector in _graphsim:
+_graphsim.VectorOfStructVector_swigregister(VectorOfStructVector)
+
 class boolpc(object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
     __repr__ = _swig_repr
@@ -379,11 +485,18 @@ class GraphRegister(object):
     def entEntropy(self, obj: "PyObject *") -> "long":
         r"""entEntropy(GraphRegister self, PyObject * obj) -> long"""
         return _graphsim.GraphRegister_entEntropy(self, obj)
-    degreeSum = property(_graphsim.GraphRegister_degreeSum_get, _graphsim.GraphRegister_degreeSum_set, doc=r"""degreeSum : long""")
+
+    def degreeSum(self) -> "long":
+        r"""degreeSum(GraphRegister self) -> long"""
+        return _graphsim.GraphRegister_degreeSum(self)
 
     def getClusters(self) -> "std::vector< long >":
         r"""getClusters(GraphRegister self) -> std::vector< long >"""
         return _graphsim.GraphRegister_getClusters(self)
+
+    def getClusterList(self) -> "std::vector< std::vector< long > >":
+        r"""getClusterList(GraphRegister self) -> VectorOfStructVector"""
+        return _graphsim.GraphRegister_getClusterList(self)
 
     def largestCluster(self) -> "long":
         r"""largestCluster(GraphRegister self) -> long"""

@@ -70,6 +70,7 @@ file and the namespace identifier.
 %include "cpointer.i"
 %include <std_vector.i> 
 %template() std::vector<long>;
+%template(VectorOfStructVector) std::vector<std::vector<long> >;
 %pointer_class (bool, boolpc);
 %feature ("autodoc", "1");
 %rename (print_tbl) Stabilizer::print;
@@ -156,8 +157,9 @@ class GraphRegister {
       const hash_set<VertexIndex> vs2);
    hash_set<VertexIndex> complementSet (const hash_set<VertexIndex> vs1);
    long entEntropy (PyObject* obj);
-   long degreeSum = 0;
+   long degreeSum();
    vector<long> getClusters ();
+   vector<vector<long> > getClusterList ();
    long largestCluster ();
    void randomTwoQubitClifford(VertexIndex v1, VertexIndex v2);
   private:

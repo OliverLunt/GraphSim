@@ -50,18 +50,14 @@ void GraphRegister::add_edge (VertexIndex v1, VertexIndex v2) {
    assert (v1 != v2);
    vertices[v1].neighbors.insert (v2);
    vertices[v2].neighbors.insert (v1);
-   degreeSum += 2;
    //D cerr << "adding edge " << v1 << " - " << v2 << endl;
 }
 
 //! Delete an edge to the graph underlying the state.
 void GraphRegister::del_edge (VertexIndex v1, VertexIndex v2) {
    DBGOUT ("deling edge " << v1 << " - " << v2 << endl);
-   int n1 = vertices[v1].neighbors.erase (v2);
+   vertices[v1].neighbors.erase (v2);
    vertices[v2].neighbors.erase (v1);
-   if (n1 == 1) {
-      degreeSum -= 2;
-   }
 }
 
 //! Toggle an edge to the graph underlying the state.
@@ -71,7 +67,6 @@ void GraphRegister::toggle_edge (VertexIndex v1, VertexIndex v2)
    int n1 = vertices[v1].neighbors.erase (v2);
    if (n1 == 1) {
       vertices[v2].neighbors.erase (v1);
-      degreeSum -= 2;
    } else {
       assert (n1 == 0);
       add_edge (v1, v2);
@@ -625,6 +620,48 @@ vector<long> GraphRegister::getClusters ()
     return clusters;
 }
 
+vector<vector<long> > GraphRegister::getClusterList ()
+{
+    int numQubits = vertices.size();
+    vector<vector<long> > clusters;
+    vector<bool> visited(numQubits);
+    for (int i = 0; i < numQubits ; i++) {
+        visited[i] = false;
+    }
+    while (any_of(visited.cbegin(),visited.cend(),[](bool i){return not i;})) {
+        // Pick a new start node
+        int start_node;
+        for (int i = 0; i < numQubits ; i++) {
+            if (!visited[i]) {
+                start_node = i;
+                break;
+            }
+        }
+        int cluster_index = clusters.size();
+        vector<long> new_cluster;
+        clusters.push_back(new_cluster);
+        clusters[cluster_index].push_back(start_node);
+        visited[start_node] = true;
+        // Queue to keep track of which nodes we need to visit
+        std::queue<int> Queue;
+        Queue.push(start_node);
+        while (!Queue.empty()) {
+            int node = Queue.front();
+            Queue.pop();
+            hash_set <VertexIndex>::iterator neighbours_Iter;
+            for (neighbours_Iter = vertices[node].neighbors.begin(); neighbours_Iter != vertices[node].neighbors.end(); neighbours_Iter++) {
+                if (!visited[*neighbours_Iter]) {
+                    visited[*neighbours_Iter] = true;
+                    Queue.push(*neighbours_Iter);
+                    clusters[cluster_index].push_back(*neighbours_Iter);
+                }
+            }
+        }
+    }
+    return clusters;
+}
+
+
 long GraphRegister::largestCluster ()
 {
     vector<long> cluster_sizes = getClusters(); 
@@ -669,4 +706,14 @@ void GraphRegister::randomTwoQubitClifford(VertexIndex v1, VertexIndex v2)
             cerr << "Gate was not one of 0, 1, 2, 3 or 4.\n";
         }
     }
+}
+
+
+long GraphRegister::degreeSum()
+{
+    long totalDegree = 0;
+    for (VertexIndex i=0 ; i<vertices.size() ; i++) {
+        totalDegree += vertices[i].neighbors.size();
+    }
+    return totalDegree;
 }

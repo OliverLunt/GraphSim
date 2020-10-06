@@ -5,10 +5,10 @@ from pdb import set_trace
 
 # Parameters
 
-N = 10
-num_steps = 4*N
+N = 40
+num_steps = 20*N
 num_samples = 100
-prob = 0.01
+prob = 0.1
 
 sample_times = np.rint(np.linspace(0, num_steps, num_samples)).astype(int)
 sample_time_check_list = np.isin(np.arange(num_steps+1), sample_times)
@@ -37,6 +37,7 @@ for n in range(num_steps):
         index = np.argwhere(sample_times == n)
         unaveraged_entropies_vs_time[index] = gr.entEntropy(ent_subsystem)
 
+print("d/N^2 = {}".format(gr.degreeSum() / N**2))
 set_trace()
 #
 #plt.plot(sample_times, unaveraged_entropies_vs_time, marker='o')
