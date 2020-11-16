@@ -498,6 +498,10 @@ class GraphRegister(object):
         r"""getClusterList(GraphRegister self) -> VectorOfStructVector"""
         return _graphsim.GraphRegister_getClusterList(self)
 
+    def getAdjList(self) -> "std::vector< std::vector< long > >":
+        r"""getAdjList(GraphRegister self) -> VectorOfStructVector"""
+        return _graphsim.GraphRegister_getAdjList(self)
+
     def largestCluster(self) -> "long":
         r"""largestCluster(GraphRegister self) -> long"""
         return _graphsim.GraphRegister_largestCluster(self)

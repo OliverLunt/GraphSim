@@ -10415,6 +10415,29 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_GraphRegister_getAdjList(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  GraphRegister *arg1 = (GraphRegister *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  std::vector< std::vector< long > > result;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_GraphRegister, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphRegister_getAdjList" "', argument " "1"" of type '" "GraphRegister *""'"); 
+  }
+  arg1 = reinterpret_cast< GraphRegister * >(argp1);
+  result = (arg1)->getAdjList();
+  resultobj = swig::from(static_cast< std::vector< std::vector< long,std::allocator< long > >,std::allocator< std::vector< long,std::allocator< long > > > > >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_GraphRegister_largestCluster(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   GraphRegister *arg1 = (GraphRegister *) 0 ;
@@ -10630,6 +10653,7 @@ static PyMethodDef SwigMethods[] = {
 	 { "GraphRegister_degreeSum", _wrap_GraphRegister_degreeSum, METH_O, "GraphRegister_degreeSum(GraphRegister self) -> long"},
 	 { "GraphRegister_getClusters", _wrap_GraphRegister_getClusters, METH_O, "GraphRegister_getClusters(GraphRegister self) -> std::vector< long >"},
 	 { "GraphRegister_getClusterList", _wrap_GraphRegister_getClusterList, METH_O, "GraphRegister_getClusterList(GraphRegister self) -> VectorOfStructVector"},
+	 { "GraphRegister_getAdjList", _wrap_GraphRegister_getAdjList, METH_O, "GraphRegister_getAdjList(GraphRegister self) -> VectorOfStructVector"},
 	 { "GraphRegister_largestCluster", _wrap_GraphRegister_largestCluster, METH_O, "GraphRegister_largestCluster(GraphRegister self) -> long"},
 	 { "GraphRegister_randomTwoQubitClifford", _wrap_GraphRegister_randomTwoQubitClifford, METH_VARARGS, "GraphRegister_randomTwoQubitClifford(GraphRegister self, VertexIndex v1, VertexIndex v2)"},
 	 { "GraphRegister_swigregister", GraphRegister_swigregister, METH_O, NULL},

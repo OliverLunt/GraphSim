@@ -107,6 +107,22 @@ void GraphRegister::print_adj_list_line (ostream& os, VertexIndex i) const
    os << endl;
 }
 
+vector<vector<long> > GraphRegister::getAdjList ()
+{
+    vector<vector<long> > AdjList;
+
+    for (VertexIndex i = 0; i < vertices.size(); i++) {
+        vector<long> new_list;
+        AdjList.push_back(new_list);
+        for (VtxIdxIterConst j = vertices[i].neighbors.begin(); 
+              j != vertices[i].neighbors.end(); j++) {
+            AdjList[i].push_back(*j);
+        }
+    }
+    return AdjList;
+}
+
+
 //! Print the current state in stabilizer representation.
 void GraphRegister::print_stabilizer (ostream &os) const
 {

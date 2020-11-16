@@ -160,6 +160,7 @@ class GraphRegister {
    long degreeSum();
    vector<long> getClusters ();
    vector<vector<long> > getClusterList ();
+   vector<vector<long> > getAdjList ();
    long largestCluster ();
    void randomTwoQubitClifford(VertexIndex v1, VertexIndex v2);
   private:
